@@ -1,402 +1,528 @@
-Linux CLI Quick Revision Notes
+# Git Quick Revision Notes
 
-⸻
+---
 
-Shell
+# Version Control
 
-Definition: Shell is a command-line interpreter that takes user commands and communicates with the Operating System Kernel.
+**Definition:**  
+Version Control System (VCS) tracks file changes over time and allows restoring previous versions.
 
-echo $SHELL
+### Why?
+
+- Track history
+- Collaborate with team
+- Recover mistakes
+
+---
+
+# Git
+
+**Definition:**  
+Git is a distributed version control system used to track and manage source code changes.
+
+### Git vs GitHub
+
+| Git | GitHub |
+|------|--------|
+| Tool/Software | Hosting Platform |
+| Works locally | Works online |
+| Tracks code changes | Stores Git repositories |
+
+---
+
+# Repository
+
+**Definition:**  
+A repository (repo) is a project folder tracked by Git.
+
+```bash
+git init
+```
+
+Creates `.git` directory.
+
+---
+
+# .git
+
+Hidden folder that stores:
+
+- Commit history
+- Branches
+- Configuration
+- Git metadata
+
+---
+
+# .gitignore
+
+Used to ignore files/folders from Git tracking.
+
+```text
+node_modules/
+.env
+dist/
+```
+
+---
+
+# Git Workflow
+
+```text
+Working Directory
+      ↓ git add
+Staging Area
+      ↓ git commit
+Commit Area (Local Repo)
+      ↓ git push
+Remote Repository
+```
+
+---
+
+# Core Concepts
+
+| Concept | Meaning |
+|----------|----------|
+| Working Directory | Current files you edit |
+| Staging Area | Changes prepared for commit |
+| Commit | Snapshot of staged changes |
+| Branch | Independent line of development |
+| HEAD | Pointer to current commit |
+
+---
+
+# Basic Commands
+
+| Command | Purpose |
+|----------|----------|
+| `git init` | Create repo |
+| `git status` | Show current state |
+| `git add .` | Stage all changes |
+| `git commit -m` | Create commit |
+| `git log` | Commit history |
+| `git clone` | Copy remote repo |
+
+---
+
+# Configuration
+
+```bash
+git config --global user.name "Pratik"
+git config --global user.email "mail@example.com"
+```
+
+---
+
+# Commits
+
+**Definition:**  
+A commit is a snapshot of staged changes stored in Git history.
+
+```bash
+git commit -m "Added login page"
+```
+
+---
+
+# Branches
+
+**Definition:**  
+A branch is an independent development line.
+
+```bash
+git branch
+git switch branch-name
+git switch -c feature-login
+git checkout -b feature-login
+```
+
+---
+
+# Branch Commands
+
+| Command | Purpose |
+|----------|----------|
+| `git branch` | List branches |
+| `git branch -m` | Rename branch |
+| `git branch -d` | Delete merged branch |
+| `git branch -D` | Force delete branch |
+
+---
+
+# HEAD
+
+**Definition:**  
+HEAD is a pointer to the currently checked-out commit.
+
+```bash
+HEAD → main → latest commit
+```
+
+---
+
+# Detached HEAD
+
+Occurs when HEAD points directly to a commit instead of a branch.
+
+```bash
+git checkout commitHash
+```
 
 {GPT Added}
 
-Flow: User → Shell → Kernel → Hardware
+Changes made in detached HEAD can be lost if not attached to a branch.
 
-⸻
+---
 
-Paths & Wildcards
+# Git Log
 
-Symbol	Meaning
-.	Current Directory
-..	Parent Directory
-~	Home Directory
--	Previous Directory
-*	Matches multiple characters
-?	Matches single character
+```bash
+git log
+git log --all --oneline --graph
+```
 
-Absolute vs Relative Path
+Useful for viewing branch structure and history.
 
-Absolute Path	Relative Path
-Starts from root /	Starts from current directory
-Full path	Partial path
-Example: /home/user/docs	Example: docs/file.txt
+---
 
-⸻
+# Restore Commands
 
-Bread & Butter Commands
+## Undo Unstaged Changes
 
-Command	Purpose	Example
-pwd	Print current directory	pwd
-cd	Change directory	cd folder
-mkdir	Create directory	mkdir test
-touch	Create file	touch a.txt
-ls	List files	ls -la
-cp	Copy files	cp a.txt b.txt
-mv	Move/Rename	mv a.txt b.txt
-rm	Delete files	rm file.txt
-cat	Display file	cat file.txt
-less	View file page by page	less file.txt
-more	Basic pager	more file.txt
-tail	Last lines of file	tail -n 20 file.txt
-tree	Directory structure	tree
-wc	Count lines/words/chars	wc file.txt
-date	Show date/time	date
-man	Manual page	man grep
-sudo	Run as root	sudo apt update
-apt	Package manager	sudo apt install tree
-rsync	Fast file sync/copy	rsync -av src dest
+```bash
+git restore file.txt
+```
 
-⸻
+## Unstage File
 
-Important Flags
+```bash
+git restore --staged file.txt
+```
 
-ls
+---
 
-Flag	Meaning
--l	Long format
--a	Hidden files
--h	Human readable
--t	Sort by time
--r	Reverse order
+# Reset vs Revert vs Restore
 
-ls -alhtr
+| Command | History Changed? | Use Case |
+|----------|-----------------|----------|
+| restore | No | Undo file changes |
+| reset | Yes | Move HEAD backward |
+| revert | No | Undo using new commit |
 
-cp
+---
 
-Flag	Meaning
--r	Recursive copy
--v	Verbose
+# Git Reset
 
-cp -r folder backup
+```bash
+git reset --soft HEAD~1
+git reset --mixed HEAD~1
+git reset --hard HEAD~1
+```
 
-rm
+| Type | Result |
+|--------|--------|
+| soft | Keep staged changes |
+| mixed | Keep unstaged changes |
+| hard | Delete everything |
 
-Flag	Meaning
--r	Recursive delete
--f	Force delete
+---
 
-rm -rf folder
+# Git Revert
 
-⸻
+Creates a new commit that undoes a previous commit.
 
-Permissions
+```bash
+git revert commitHash
+```
 
-chmod
+Safe for shared branches.
 
-Definition: Changes file permissions.
+---
 
-chmod 755 file.sh
+# Merge
 
-Permission Elements
+Combines one branch into another.
 
-Number	Binary	Permission
-7	111	rwx
-6	110	rw-
-5	101	r-x
-4	100	r–
+```bash
+git merge feature-branch
+```
 
-Permission Groups
+---
 
-Symbol	Meaning
-u	User
-g	Group
-o	Others
+# Merge Conflict
 
-⸻
+Occurs when Git cannot automatically decide which change to keep.
 
-chown
+### Common Cause
 
-Definition: Changes file owner.
+Same file + same lines modified in multiple branches.
 
-sudo chown user file.txt
+---
 
-⸻
+# Rebase
 
-Process Commands
+Moves commits to a new base commit.
 
-Command	Purpose
-ps	Snapshot of running processes
-top	Live process monitoring
-kill	Stop process
-free	Memory usage
-df	Disk usage
-uname	System info
-lspci	Hardware devices
+```bash
+git rebase main
+```
 
-Common
+Produces cleaner history.
 
-ps -ef
-top
-free -h
-df -h
-uname -a
+---
 
-⸻
+# Merge vs Rebase
 
-kill Signals
+| Merge | Rebase |
+|---------|---------|
+| Preserves history | Rewrites history |
+| Creates merge commit | No merge commit |
+| Safer | Cleaner |
 
-Signal	Meaning
--1	Reload
--2	Interrupt
--9	Force Kill
--15	Graceful Kill (Default)
+---
 
-kill -9 PID
+# Remote Repository
 
-Why kill -9?
+## Add Remote
 
-Forcefully terminates a process when it is not responding.
+```bash
+git remote add origin URL
+```
 
-⸻
+## View Remote
 
-top vs ps
+```bash
+git remote -v
+```
 
-top	ps
-Live monitoring	Snapshot
-Continuously updates	Runs once
-Interactive	Non-interactive
+## Change Remote URL
 
-⸻
+```bash
+git remote set-url origin URL
+```
 
-Network Commands
+## Remove Remote
 
-Command	Purpose
-ping	Check connectivity
-ifconfig	Network info
-ssh	Remote login
-netstat	Connections & ports
-lsof	Open files/ports
-curl	Download/Test APIs
-wget	Download files
+```bash
+git remote remove origin
+```
 
-Examples
+---
 
-ping google.com
-ifconfig
-ssh user@host
-curl https://google.com
-wget URL
+# What is Origin?
 
-⸻
+**Definition:**  
+Origin is the default nickname of the remote repository.
 
-Bash Utilities
+```text
+origin → GitHub/GitLab Repo URL
+```
 
-Command	Purpose
-grep	Search text
-find	Find files
-sort	Sort lines
-awk	Text processing
-sed	Text editing
-xargs	Build command arguments
-printenv	Environment variables
-nano	Terminal editor
-`	`
+---
 
-⸻
+# Push Commands
 
-grep
+```bash
+git push
+git push origin main
+git push -u origin main
+```
 
-grep word file.txt
-grep -i word file.txt
-grep -c word file.txt
-grep -r word folder
+### Difference
 
-Flag	Meaning
--i	Ignore case
--c	Count
--r	Recursive
--n	Line number
+| Command | Meaning |
+|----------|----------|
+| push | Push to linked upstream |
+| push origin main | Explicit push |
+| push -u origin main | Push + set upstream |
 
-⸻
+---
 
-find
+# Fetch vs Pull
 
-find . -name "*.txt"
-find . -type f
-find . -type d
+| Fetch | Pull |
+|---------|---------|
+| Downloads changes | Downloads + merges |
+| Safe | Can create conflicts |
 
-Flag	Meaning
--name	Search by name
--type f	File
--type d	Directory
+```bash
+git fetch
+git pull
+```
 
-⸻
+---
 
-sort
+# Clone
 
-sort file.txt
-sort -r file.txt
-sort -n file.txt
+Creates a complete local copy of a repository.
 
-⸻
+```bash
+git clone URL
+```
 
-awk
+---
 
-awk '{print $1}' file.txt
+# SSH vs Token
 
-Prints first column.
+| SSH | Token |
+|------|------|
+| Key-based | Password replacement |
+| Setup once | Used repeatedly |
+| More secure | Easier initially |
 
-⸻
+### Test SSH
 
-sed
+```bash
+ssh -T git@gitlab.com
+```
 
-sed 's/old/new/g' file.txt
+---
 
-Replace text.
+# Git Stash
 
-⸻
+Temporarily stores uncommitted work.
 
-Pipe Operator
+```bash
+git stash
+git stash pop
+git stash list
+git stash apply
+git stash drop
+git stash clear
+```
 
-cat file.txt | grep error
+---
 
-Output of first command becomes input of second command.
+# Cherry Pick
 
-⸻
+Copies a specific commit to another branch.
 
-Terminal Controls
+```bash
+git cherry-pick commitHash
+```
 
-Shortcut	Action
-Ctrl+C	Stop process
-Ctrl+Z	Suspend process
-Ctrl+D	EOF / Exit shell
-Ctrl+R	Reverse search
-Tab	Auto-complete
-↑ ↓	Command history
+---
 
-Ctrl+C vs Ctrl+Z
+# Reflog (Git Time Machine)
 
-Ctrl+C	Ctrl+Z
-Terminates process	Suspends process
+Shows every HEAD movement.
 
-⸻
+```bash
+git reflog --oneline --all
+```
 
-Frequently Asked Review Questions
+Recover lost commits using:
 
-Check Disk Status
+```bash
+git reset HEAD@{n}
+```
 
-df -h
+{GPT Added}
 
-Most Senior Parent Process
+Most powerful recovery command in Git.
 
-ps -p 1
+---
 
-PID 1 is usually init/systemd.
+# Git RM
 
-Computer Architecture
+## Remove From Git + Disk
 
-uname -m
+```bash
+git rm file.txt
+```
 
-Audio Driver
+## Remove From Git Only
 
-Linux:
+```bash
+git rm --cached file.txt
+```
 
-lspci | grep Audio
+## Recursive Delete
 
-Mac:
+```bash
+git rm -rf folder
+```
 
-system_profiler SPAudioDataType
+---
 
-Local IP Address
+# Common Rescue Scenarios
 
-ifconfig
+## Wrong Commit Message
 
-Google IP
+```bash
+git commit --amend
+```
 
-ping google.com
+---
 
-Check Internet
+## Forgot File In Last Commit
 
-ping google.com
+```bash
+git add file.txt
+git commit --amend --no-edit
+```
 
-Node Location
+---
 
-which node
+## Committed On Master
 
-VS Code Location
+```bash
+git branch feature-branch
+git reset --hard HEAD~1
+git switch feature-branch
+```
 
-which code
+---
 
-Browser PIDs
+## Committed To Wrong Branch
 
-ps -ef | grep firefox
+```bash
+git reset --soft HEAD~1
+git stash
+git switch correct-branch
+git stash pop
+```
 
-Stop Browser
+OR
 
-kill PID
+```bash
+git cherry-pick commitHash
+```
 
-Top 3 CPU Processes
+---
 
-ps aux --sort=-%cpu | head -4
+## Undo Last 5 Commits
 
-Top 3 Memory Processes
+```bash
+git reset --hard HEAD~5
+```
 
-ps aux --sort=-%mem | head -4
+---
 
-Python Server Port 8000
+## Undo Changes To File
 
-python3 -m http.server 8000
+```bash
+git restore file.txt
+```
 
-Stop:
+---
 
-Ctrl+C
+# Review Keywords
 
-Python Server Port 90
-
-sudo python3 -m http.server 90
-
-Active Connections
-
-netstat -tulpn
-
-PID Listening on Port 5432
-
-lsof -i :5432
-
-Lines 100-200
-
-head -200 book.txt | tail -101
-
-Delete All .log Files
-
-find . -name "*.log" -delete
-
-⸻
-
-Service vs Application
-
-Service	Application
-Runs in background	User interacts directly
-Starts with system	Opened manually
-Example: nginx	Example: Firefox
-
-⸻
-
-Revision Keywords
-
-Shell = Command Interpreter
-chmod = Change Permission
-chown = Change Owner
-grep = Search Text
-find = Search Files
-ps = Process Snapshot
-top = Live Monitoring
-kill = Send Signal
-df = Disk Usage
-free = Memory Usage
-ifconfig = Network Info
-ssh = Remote Access
-awk = Text Processing
-sed = Text Replacement
-xargs = Build Arguments
-pipe = Connect Commands
+```text
+Git = Version Control System
+Repository = Tracked Project
+Commit = Snapshot
+Branch = Independent Development Line
+HEAD = Current Commit Pointer
+Merge = Combine Branches
+Rebase = Move Commit Base
+Origin = Remote Alias
+Fetch = Download
+Pull = Download + Merge
+Push = Upload Commits
+Stash = Temporary Storage
+Cherry-Pick = Copy Commit
+Reflog = Recovery History
+```
